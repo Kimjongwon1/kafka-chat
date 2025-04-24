@@ -23,4 +23,18 @@ public class ChatController {
     public List<ChatMessage> getHistory() {
         return chatService.getMessageHistory();
     }
+    @GetMapping("/history/{roomId}")
+    public List<ChatMessage> getHistoryByRoom(@PathVariable String roomId) {
+        return chatService.getMessageHistoryByRoom(roomId);  // 서비스 거쳐감
+    }
+    @GetMapping("/rooms")
+    public List<String> getAllRoomIds() {
+        return chatService.getAllRoomIds(); // 🔥 서비스 통해 조회
+    }
+    @GetMapping("/room/{roomId}/count")
+    public int getParticipantCount(@PathVariable String roomId) {
+        return chatService.getParticipantCount(roomId);
+    }
+
+
 }

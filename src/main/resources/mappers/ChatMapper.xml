@@ -12,4 +12,19 @@
     <select id="getAllMessages" resultType="com.example.kafka_chat.chat.ChatMessage">
         SELECT * FROM chat_message ORDER BY id ASC
     </select>
+
+    <select id="getMessagesByRoomId" resultType="com.example.kafka_chat.chat.ChatMessage">
+        SELECT * FROM chat_message
+        WHERE room_id = #{roomId}
+        ORDER BY timestamp ASC
+    </select>
+    <select id="getAllRoomIds" resultType="string">
+        SELECT DISTINCT room_id FROM chat_message ORDER BY room_id
+    </select>
+    <select id="countParticipantsInRoom" resultType="int">
+        SELECT COUNT(DISTINCT sender)
+        FROM chat_message
+        WHERE room_id = #{roomId}
+    </select>
+
 </mapper>

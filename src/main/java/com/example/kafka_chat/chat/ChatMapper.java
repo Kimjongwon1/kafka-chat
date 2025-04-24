@@ -10,4 +10,8 @@ import java.util.List;
 public interface ChatMapper {
     void insertChatMessage(ChatMessage message);
     List<ChatMessage> getAllMessages();
+    List<ChatMessage> getMessagesByRoomId(String roomId);
+    List<String> getAllRoomIds();
+    int countParticipantsInRoom(String roomId);
+
 }
