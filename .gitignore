@@ -1,37 +1,47 @@
-HELP.md
-.gradle
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+
+### Gradle ###
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
+### Spring Boot config (보안 중요) ###
+src/main/resources/application.yml
+src/main/resources/application-*.yml
+src/main/resources/application.properties
+src/main/resources/application-*.properties
+.env
+*.env
+
+### Logs ###
+*.log
+logs/
+nohup.out
+
+### IntelliJ ###
+.idea/
+*.iml
+*.iws
+out/
+
+### Eclipse / STS ###
 .project
-.settings
+.classpath
+.settings/
+.apt_generated
+.factorypath
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
+### VSCode ###
 .vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
