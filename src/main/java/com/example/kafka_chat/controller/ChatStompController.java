@@ -1,7 +1,7 @@
 package com.example.kafka_chat.controller;
 
-import com.example.kafka_chat.chat.ChatMessage;
-import com.example.kafka_chat.chat.ChatProducer;
+import com.example.kafka_chat.chat.chat.ChatMessage;
+import com.example.kafka_chat.chat.chat.ChatProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;

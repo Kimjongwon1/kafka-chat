@@ -1,4 +1,4 @@
-package com.example.kafka_chat.chat;
+package com.example.kafka_chat.chat.chatroom;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

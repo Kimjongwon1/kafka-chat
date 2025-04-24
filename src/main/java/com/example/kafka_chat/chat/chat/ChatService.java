@@ -1,4 +1,4 @@
-package com.example.kafka_chat.chat;
+package com.example.kafka_chat.chat.chat;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -20,9 +20,10 @@ public class ChatService {
             message.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
-        messagingTemplate.convertAndSend("/sub/chat/message", message); // 브로드캐스트
+        messagingTemplate.convertAndSend("/sub/chat/" + message.getRoomId(), message); // ✅ roomId 기반으로 변경
         chatMapper.insertChatMessage(message); // DB 저장
     }
+
 
     public List<ChatMessage> getMessageHistory() {
         return chatMapper.getAllMessages();

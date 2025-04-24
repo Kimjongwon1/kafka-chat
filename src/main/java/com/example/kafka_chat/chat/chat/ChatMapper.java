@@ -1,4 +1,4 @@
-package com.example.kafka_chat.chat;
+package com.example.kafka_chat.chat.chat;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

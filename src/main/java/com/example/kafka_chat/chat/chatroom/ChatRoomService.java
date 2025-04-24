@@ -1,4 +1,4 @@
-package com.example.kafka_chat.chat;
+package com.example.kafka_chat.chat.chatroom;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,9 @@ public class ChatRoomService {
         ChatRoom room = new ChatRoom();
         room.setName(name);
         mapper.createRoom(room); // 생성된 ID는 room.getId()로 꺼낼 수 있음
+    }
+    public void deleteRoomById(int roomId) {
+        mapper.deleteRoomById(roomId);
     }
 
 }

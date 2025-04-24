@@ -3,17 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.kafka_chat.chat.ChatMapper">
+<mapper namespace="com.example.kafka_chat.chat.chat.ChatMapper">
     <insert id="insertChatMessage">
-        INSERT INTO chat_message (sender, message, timestamp)
-        VALUES (#{sender}, #{message}, #{timestamp})
+        INSERT INTO chat_message (sender, message, timestamp, room_id)
+        VALUES (#{sender}, #{message}, #{timestamp}, #{roomId})
     </insert>
 
-    <select id="getAllMessages" resultType="com.example.kafka_chat.chat.ChatMessage">
+    <select id="getAllMessages" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
         SELECT * FROM chat_message ORDER BY id ASC
     </select>
 
-    <select id="getMessagesByRoomId" resultType="com.example.kafka_chat.chat.ChatMessage">
+    <select id="getMessagesByRoomId" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
         SELECT * FROM chat_message
         WHERE room_id = #{roomId}
         ORDER BY timestamp ASC
