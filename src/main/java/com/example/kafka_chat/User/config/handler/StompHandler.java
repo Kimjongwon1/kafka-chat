@@ -41,6 +41,9 @@ public class StompHandler implements ChannelInterceptor {
                                     List.of(new SimpleGrantedAuthority(role))
                             );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                }else{
+                    System.out.println("❌ JWT 유효하지 않음"); // ← 이거 뜨면 토큰 파싱 실패
+
                 }
             }
         }

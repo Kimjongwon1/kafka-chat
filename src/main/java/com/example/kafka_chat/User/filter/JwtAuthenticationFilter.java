@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("🧪 JwtAuthenticationFilter 호출됨"); // ✅ 이거 반드시
 
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
@@ -34,11 +36,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = jwtUtil.extractClaims(token);
                 String username = claims.getSubject();
                 String role = claims.get("role", String.class);
+
+                List<SimpleGrantedAuthority> authorities =
+                        List.of(new SimpleGrantedAuthority(role));
+                // ✅ UserDetails 대신 User 객체 전달
+                User userPrincipal =
+                        new User(username, "", authorities);
+
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority(role)));
+                        new UsernamePasswordAuthenticationToken(userPrincipal, null, authorities);
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
         filterChain.doFilter(request, response);
     }
+
 }

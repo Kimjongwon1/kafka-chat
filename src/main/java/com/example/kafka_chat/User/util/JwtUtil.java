@@ -26,7 +26,7 @@ public class JwtUtil {
 
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -37,6 +37,7 @@ public class JwtUtil {
             extractClaims(token);
             return true;
         } catch (Exception e) {
+            System.out.println("❌ JWT 유효성 검사 실패: " + e.getMessage());
             return false;
         }
     }
