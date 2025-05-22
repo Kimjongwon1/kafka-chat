@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class ChatRoom {
     private Integer id;
     private String name;
+    private String password;
+    private String createId;
 }

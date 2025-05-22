@@ -12,8 +12,10 @@
 
     <!-- 채팅방 생성 -->
     <insert id="createRoom" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO chat_room (name) VALUES (#{name})
+        INSERT INTO chat_room (name, password, createId)
+        VALUES (#{name}, #{password}, #{createId})
     </insert>
+
 
 
     <!-- 단일 채팅방 조회 (필요 시) -->

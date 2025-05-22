@@ -20,7 +20,7 @@ public class ChatRoomController {
 
     @PostMapping("/create")
     public ResponseEntity<ChatRoom> createRoom(@RequestBody ChatRoom room) {
-        service.createRoom(room.getName());
+        service.createRoom(room.getName(),room.getPassword(), room.getCreateId());
         return ResponseEntity.ok(room);
     }
     @DeleteMapping("/delete/{roomId}")

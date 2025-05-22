@@ -14,9 +14,11 @@ public class ChatRoomService {
         return mapper.getAllRooms();
     }
 
-    public void createRoom(String name) {
+    public void createRoom(String name, String password, String createId) {
         ChatRoom room = new ChatRoom();
         room.setName(name);
+        room.setPassword(password);
+        room.setCreateId(createId);
         mapper.createRoom(room); // 생성된 ID는 room.getId()로 꺼낼 수 있음
     }
     public void deleteRoomById(int roomId) {

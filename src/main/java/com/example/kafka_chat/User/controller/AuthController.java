@@ -27,8 +27,8 @@ public class AuthController {
         User user = userService.authenticate(loginRequest.username(), loginRequest.password());
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + token) // ✅ 헤더로 전송
-                .body(Map.of("message", "로그인 성공"));       // ✅ 바디에는 상태만
+                .header("Authorization", "Bearer " + token)
+                .body(Map.of("message", "로그인 성공", "role", user.getRole(),"username", user.getUsername() ,"id",user.getId()));
 
     }
     @PostMapping("/register")

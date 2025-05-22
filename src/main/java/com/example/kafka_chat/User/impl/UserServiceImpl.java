@@ -2,6 +2,7 @@ package com.example.kafka_chat.User.impl;
 
 import com.example.kafka_chat.User.entity.User;
 import com.example.kafka_chat.User.repository.UserRepository;
+import com.example.kafka_chat.User.request.LoginRequest;
 import com.example.kafka_chat.User.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,4 +43,5 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
+
 }
