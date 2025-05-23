@@ -38,4 +38,8 @@ public class ChatService {
     public int getParticipantCount(String roomId) {
         return chatMapper.countParticipantsInRoom(roomId);
     }
+
+    public List<ChatMessage> getPrivateMessagesByRoomId(String roomId) {
+        return chatMapper.getPrivateMessagesByRoomId(roomId);
+    }
 }

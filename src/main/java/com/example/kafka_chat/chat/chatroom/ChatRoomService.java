@@ -1,5 +1,6 @@
 package com.example.kafka_chat.chat.chatroom;
 
+import com.example.kafka_chat.User.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +26,21 @@ public class ChatRoomService {
         mapper.deleteRoomById(roomId);
     }
 
+    public int  privatecreateRoom(String name, String password, String createId, String inviteId) {
+        PrivateChatRoom room = new PrivateChatRoom();
+        room.setName(name);
+        room.setPassword(password);
+        room.setCreateId(createId);
+        room.setInviteId(inviteId);
+        mapper.privatecreateRoom(room);
+        return room.getId();
+    }
+
+    public List<PrivateChatRoom> getMyAllPrivateRooms(String userId) {
+        return mapper.getMyAllPrivateRooms(userId);
+    }
+
+    public List<User> getAllUsers() {
+        return mapper.getAllUsers();
+    }
 }

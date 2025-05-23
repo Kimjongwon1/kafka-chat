@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.kafka_chat.chat.chat.ChatPrivateMapper">
+
+    <!-- 채팅 메시지 저장 -->
+    <insert id="insertPrivateMessage" parameterType="com.example.kafka_chat.chat.chat.ChatMessage">
+        INSERT INTO chat_private_message (
+        room_id,
+        sender,
+        message,
+        timestamp
+        ) VALUES (
+        #{roomId},
+        #{sender},
+        #{message},
+        #{timestamp}
+        )
+    </insert>
+
+    <!-- 채팅 메시지 히스토리 조회 -->
+    <select id="getPrivateMessagesByRoomId" parameterType="string" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
+        SELECT
+        id,
+        room_id AS roomId,
+        sender,
+        message,
+        timestamp
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        ORDER BY timestamp ASC
+    </select>
+
+</mapper>

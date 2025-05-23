@@ -34,7 +34,7 @@ public class ChatJoinController {
         Set<String> users = roomParticipants.get(roomId);
         int count = (users != null) ? users.size() : 0;
 
-        System.out.println("🟢 join 호출됨: " + username + " / roomId: " + roomId);
+//        System.out.println("🟢 join 호출됨: " + username + " / roomId: " + roomId);
 //        System.out.println("현재 참여자 목록: " + users);
 //        System.out.println("👥 브로드캐스트할 참여자 수: " + count);
 
