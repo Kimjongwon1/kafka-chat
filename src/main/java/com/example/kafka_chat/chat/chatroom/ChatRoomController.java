@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/room") // ✅ 완전 별도 경로로
+@RequestMapping("/api/room")
 @RequiredArgsConstructor
 public class ChatRoomController {
 

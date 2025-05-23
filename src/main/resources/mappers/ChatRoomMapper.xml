@@ -11,10 +11,18 @@
     </select>
 
     <select id="getMyAllPrivateRooms" resultType="com.example.kafka_chat.chat.chatroom.PrivateChatRoom">
-        SELECT * FROM chat_private_room
+        SELECT
+        id,
+        name,
+        password,
+        create_id AS createId,
+        invite_id AS inviteId,
+        created_at AS createdAt
+        FROM chat_private_room
         WHERE create_id = #{userId} OR invite_id = #{userId}
         ORDER BY created_at DESC
     </select>
+
 
     <select id="getAllUsers" resultType="com.example.kafka_chat.User.entity.User">
         SELECT id, username, role

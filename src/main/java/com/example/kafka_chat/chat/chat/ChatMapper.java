@@ -14,5 +14,4 @@ public interface ChatMapper {
     List<String> getAllRoomIds();
     int countParticipantsInRoom(String roomId);
 
-    List<ChatMessage> getPrivateMessagesByRoomId(String roomId);
 }
