@@ -9,6 +9,16 @@
     <select id="getAllRooms" resultType="com.example.kafka_chat.chat.chatroom.ChatRoom">
         SELECT * FROM chat_room
     </select>
+    <select id="getPrivateRoomById" resultType="com.example.kafka_chat.chat.chatroom.PrivateChatRoom">
+        SELECT
+        id,
+        name,
+        password,
+        create_id AS createId,
+        invite_id AS inviteId
+        FROM chat_private_room
+        WHERE id = #{roomId}
+    </select>
 
     <select id="getMyAllPrivateRooms" resultType="com.example.kafka_chat.chat.chatroom.PrivateChatRoom">
         SELECT

@@ -43,4 +43,7 @@ public class ChatRoomService {
     public List<User> getAllUsers() {
         return mapper.getAllUsers();
     }
+    public PrivateChatRoom getPrivateRoomById(int roomId) {
+        return mapper.getPrivateRoomById(roomId);
+    }
 }

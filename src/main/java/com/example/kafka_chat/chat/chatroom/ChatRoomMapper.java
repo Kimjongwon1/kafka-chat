@@ -19,4 +19,5 @@ public interface ChatRoomMapper {
     List<PrivateChatRoom> getMyAllPrivateRooms(String userId);
 
     List<User> getAllUsers();
+    PrivateChatRoom getPrivateRoomById(@Param("roomId") int roomId);
 }

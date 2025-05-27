@@ -2,6 +2,7 @@ package com.example.kafka_chat.chat.chat;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.example.kafka_chat.chat.chat.ChatMessage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,4 +14,8 @@ public interface ChatPrivateMapper {
 
     // 특정 방의 메시지 전체 조회
     List<ChatMessage> getPrivateMessagesByRoomId(String roomId);
+
+    void deletePrivateRoomById(@Param("roomId") int roomId);
+
+
 }

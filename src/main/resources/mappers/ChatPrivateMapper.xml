@@ -20,6 +20,7 @@
         )
     </insert>
 
+
     <!-- 채팅 메시지 히스토리 조회 -->
     <select id="getPrivateMessagesByRoomId" parameterType="string" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
         SELECT
@@ -32,5 +33,7 @@
         WHERE room_id = #{roomId}
         ORDER BY timestamp ASC
     </select>
-
+    <delete id="deletePrivateRoomById">
+        DELETE FROM chat_private_room WHERE id = #{roomId}
+    </delete>
 </mapper>

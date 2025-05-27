@@ -26,4 +26,7 @@ public class ChatPrivateService {
     public List<ChatMessage> getHistoryByRoom(String roomId) {
         return mapper.getPrivateMessagesByRoomId(roomId);
     }
+    public void deletePrivateRoomById(int roomId){
+        mapper.deletePrivateRoomById(roomId);
+    };
 }
