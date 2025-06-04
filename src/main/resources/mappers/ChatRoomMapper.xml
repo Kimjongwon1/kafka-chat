@@ -9,13 +9,47 @@
     <select id="getAllRooms" resultType="com.example.kafka_chat.chat.chatroom.ChatRoom">
         SELECT * FROM chat_room
     </select>
+    <select id="getPrivateRoomById" resultType="com.example.kafka_chat.chat.chatroom.PrivateChatRoom">
+        SELECT
+        id,
+        name,
+        password,
+        create_id AS createId,
+        invite_id AS inviteId
+        FROM chat_private_room
+        WHERE id = #{roomId}
+    </select>
+
+    <select id="getMyAllPrivateRooms" resultType="com.example.kafka_chat.chat.chatroom.PrivateChatRoom">
+        SELECT
+        id,
+        name,
+        password,
+        create_id AS createId,
+        invite_id AS inviteId,
+        created_at AS createdAt
+        FROM chat_private_room
+        WHERE create_id = #{userId} OR invite_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+
+    <select id="getAllUsers" resultType="com.example.kafka_chat.User.entity.User">
+        SELECT id, username, role
+        FROM users
+    </select>
+
 
     <!-- 채팅방 생성 -->
     <insert id="createRoom" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO chat_room (name, password, createId)
         VALUES (#{name}, #{password}, #{createId})
     </insert>
-
+    <!-- 개인 채팅방 생성 -->
+    <insert id="privatecreateRoom" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat_private_room (name, password, create_id, invite_id)
+        VALUES (#{name}, #{password}, #{createId}, #{inviteId})
+    </insert>
 
 
     <!-- 단일 채팅방 조회 (필요 시) -->

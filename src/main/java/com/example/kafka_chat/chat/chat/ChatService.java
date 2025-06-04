@@ -13,6 +13,7 @@ import java.util.List;
 public class ChatService {
 
     private final ChatMapper chatMapper;
+    private final ChatPrivateMapper chatPrivateMapper;
     private final SimpMessagingTemplate messagingTemplate;
 
     public void saveAndBroadcast(ChatMessage message) {
@@ -37,5 +38,9 @@ public class ChatService {
     }
     public int getParticipantCount(String roomId) {
         return chatMapper.countParticipantsInRoom(roomId);
+    }
+
+    public List<ChatMessage> getPrivateMessagesByRoomId(String roomId) {
+        return chatPrivateMapper.getPrivateMessagesByRoomId(roomId);
     }
 }
