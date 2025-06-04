@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -11,8 +12,11 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String secretKey = "my-secret-key-which-is-long-enough-for-hmac-sha256!"; // 환경변수로 관리 권장
-    private final long expiration = 1000 * 60 * 60;
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     public String generateToken(String username, String role) {
         return Jwts.builder()
@@ -32,13 +36,33 @@ public class JwtUtil {
                 .getBody();
     }
 
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
+    }
+
+    public String extractRole(String token) {
+        return extractClaims(token).get("role", String.class);
+    }
+
+    public boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
+    }
+
     public boolean isValid(String token) {
         try {
-            extractClaims(token);
-            return true;
+            Claims claims = extractClaims(token);
+            return !isTokenExpired(token);
         } catch (Exception e) {
             System.out.println("❌ JWT 유효성 검사 실패: " + e.getMessage());
             return false;
         }
+    }
+
+    // 토큰 갱신 메서드 추가
+    public String refreshToken(String token) {
+        Claims claims = extractClaims(token);
+        String username = claims.getSubject();
+        String role = claims.get("role", String.class);
+        return generateToken(username, role);
     }
 }
