@@ -23,8 +23,9 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register","/ws-chat/**","/api/chat/participants/count","/api/chat/history/private/**").permitAll()
-//                        .requestMatchers("/api/room/**", "/api/chat/room/**").authenticated()
+                        .requestMatchers("/api/login", "/api/register", "/ws-chat/**",
+                                "/api/chat/participants/count", "/api/chat/history/private/**",
+                                "/api/chat/private/**", "/api/chat/mark-as-read").permitAll() // 🔥 추가
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)

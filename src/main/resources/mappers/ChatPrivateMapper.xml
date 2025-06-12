@@ -5,35 +5,158 @@
 
 <mapper namespace="com.example.kafka_chat.chat.chat.ChatPrivateMapper">
 
+    <!-- 🔔 ===== 기본 채팅 메서드들 ===== 🔔 -->
+
     <!-- 채팅 메시지 저장 -->
     <insert id="insertPrivateMessage" parameterType="com.example.kafka_chat.chat.chat.ChatMessage">
-        INSERT INTO chat_private_message (
-        room_id,
-        sender,
-        message,
-        timestamp
-        ) VALUES (
-        #{roomId},
-        #{sender},
-        #{message},
-        #{timestamp}
-        )
+        INSERT INTO chat_private_message (room_id, sender, message, timestamp)
+        VALUES (#{roomId}, #{sender}, #{message}, #{timestamp})
     </insert>
-
 
     <!-- 채팅 메시지 히스토리 조회 -->
     <select id="getPrivateMessagesByRoomId" parameterType="string" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
-        SELECT
-        id,
-        room_id AS roomId,
-        sender,
-        message,
-        timestamp
+        SELECT id, room_id AS roomId, sender, message, timestamp
         FROM chat_private_message
         WHERE room_id = #{roomId}
         ORDER BY timestamp ASC
     </select>
+
+    <!-- 방 삭제 -->
     <delete id="deletePrivateRoomById">
         DELETE FROM chat_private_room WHERE id = #{roomId}
     </delete>
+
+    <!-- 🔥 ===== 읽음 상태 관리 쿼리들 (DB 기반) ===== 🔥 -->
+
+    <!-- 채팅방 정보 조회 -->
+    <select id="findPrivateRoomById" parameterType="long" resultType="com.example.kafka_chat.chat.chat.ChatPrivateRoom">
+        SELECT id, name, password,
+        create_id as createId,
+        invite_id as inviteId,
+        create_user_last_read as createUserLastRead,
+        invite_user_last_read as inviteUserLastRead,
+        created_at as createdAt
+        FROM chat_private_room
+        WHERE id = #{roomId}
+    </select>
+
+    <!-- 안읽은 메시지 개수 조회 (LocalDateTime 사용) -->
+    <select id="countUnreadPrivateMessages" resultType="int">
+        SELECT COUNT(*)
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        AND timestamp > #{lastReadTime}
+    </select>
+
+    <!-- 생성자 읽음 시간 업데이트 (LocalDateTime 사용) -->
+    <update id="updateCreateUserLastRead">
+        UPDATE chat_private_room
+        SET create_user_last_read = #{readTime}
+        WHERE id = #{roomId}
+    </update>
+
+    <!-- 초대자 읽음 시간 업데이트 (LocalDateTime 사용) -->
+    <update id="updateInviteUserLastRead">
+        UPDATE chat_private_room
+        SET invite_user_last_read = #{readTime}
+        WHERE id = #{roomId}
+    </update>
+
+    <!-- 🔔 ===== 유틸리티 쿼리들 ===== 🔔 -->
+
+    <!-- 마지막 메시지 조회 -->
+    <select id="getLastPrivateMessage" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
+        SELECT id, room_id AS roomId, sender, message, timestamp
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        ORDER BY timestamp DESC
+        LIMIT 1
+    </select>
+
+    <!-- 첫 번째 메시지 조회 -->
+    <select id="getFirstPrivateMessage" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
+        SELECT id, room_id AS roomId, sender, message, timestamp
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        ORDER BY timestamp ASC
+        LIMIT 1
+    </select>
+
+    <!-- 총 메시지 개수 조회 -->
+    <select id="countTotalPrivateMessages" resultType="int">
+        SELECT COUNT(*)
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+    </select>
+
+    <!-- 특정 사용자의 메시지 개수 조회 -->
+    <select id="countPrivateMessagesByUser" resultType="int">
+        SELECT COUNT(*)
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        AND sender = #{userId}
+    </select>
+
+    <!-- 특정 시간 이후 메시지 조회 -->
+    <select id="getPrivateMessagesAfterTime" resultType="com.example.kafka_chat.chat.chat.ChatMessage">
+        SELECT id, room_id AS roomId, sender, message, timestamp
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        AND timestamp > #{timestamp}
+        ORDER BY timestamp ASC
+    </select>
+
+    <!-- 특정 사용자를 제외한 안읽은 메시지 개수 (String 기반) -->
+    <select id="countUnreadPrivateMessagesExcludingUser" resultType="int">
+        SELECT COUNT(*)
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        AND timestamp > #{lastReadTime}
+        AND sender != #{userId}
+    </select>
+
+    <!-- 특정 사용자가 보낸 메시지 중 특정 시간 이후의 개수 (String 기반) -->
+    <select id="countUnreadPrivateMessagesFromUser" resultType="int">
+        SELECT COUNT(*)
+        FROM chat_private_message
+        WHERE room_id = #{roomId}
+        AND sender = #{sender}
+        AND timestamp > #{timestamp}
+    </select>
+
+    <!-- 🔥 ===== 배치 처리용 쿼리들 ===== 🔥 -->
+
+    <!-- 여러 방 정보 한번에 조회 -->
+    <select id="findPrivateRoomsByIds" resultType="com.example.kafka_chat.chat.chat.ChatPrivateRoom">
+        SELECT id, name, password,
+        create_id as createId,
+        invite_id as inviteId,
+        create_user_last_read as createUserLastRead,
+        invite_user_last_read as inviteUserLastRead,
+        created_at as createdAt
+        FROM chat_private_room
+        WHERE id IN
+        <foreach collection="roomIds" item="roomId" open="(" close=")" separator=",">
+            #{roomId}
+        </foreach>
+    </select>
+
+    <!-- 사용자가 참여한 모든 방 조회 -->
+    <select id="findPrivateRoomsByUserId" resultType="com.example.kafka_chat.chat.chat.ChatPrivateRoom">
+        SELECT id, name, password,
+        create_id as createId,
+        invite_id as inviteId,
+        create_user_last_read as createUserLastRead,
+        invite_user_last_read as inviteUserLastRead,
+        created_at as createdAt
+        FROM chat_private_room
+        WHERE create_id = #{userId} OR invite_id = #{userId}
+    </select>
+
+    <!-- 방 생성 -->
+    <insert id="insertPrivateRoom" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat_private_room (name, password, create_id, invite_id, create_user_last_read, invite_user_last_read, created_at)
+        VALUES (#{name}, #{password}, #{createId}, #{inviteId}, NOW(), NOW(), NOW())
+    </insert>
+
 </mapper>
